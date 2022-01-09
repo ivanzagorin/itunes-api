@@ -5,7 +5,7 @@
   </form>
   <div v-if="data.results">
     <div class="album" v-for="album in data.results" :key="album.artistId">
-      <TheShowAlbum :album="album" />
+      <Album :album="album" />
     </div>
   </div>
 </template>
@@ -14,33 +14,19 @@
 import { defineComponent, reactive, ref, toRefs } from "vue";
 import { itunesSearch } from "./services/iTunesAPI";
 import { ItunesTypes } from "./types/ItunesTypes.interface";
-import TheShowAlbum from "./components/TheShowAlbum.vue";
+import Album from "./components/Album.vue";
 
 export default defineComponent({
   name: "App",
   components: {
-    TheShowAlbum
+    Album
   },
-  // data: () => {
-  //   return {
-  //     data: {} as ItunesTypes,
-  //     searchText: ""
-  //   };
-  // },
-  // methods: {
-  //   async searchItunes(search: string): Promise<void> {
-  //     const value = await itunesSearch(search);
-  //     this.data = value;
-  //     console.log("data", value);
-  //   }
-  // },
   setup() {
     let albums = reactive<{ data: ItunesTypes }>({ data: {} });
     let searchText = ref("");
     const searchItunes = async (search: string): Promise<void> => {
       const value = await itunesSearch(search);
       albums.data = value;
-      console.log("data", albums);
     };
 
     return { searchItunes, ...toRefs(albums), searchText };
